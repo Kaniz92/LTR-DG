@@ -7,7 +7,7 @@ import pickle
 import time
 import math
 import datetime
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 from functools import wraps
 
 import Discriminator
