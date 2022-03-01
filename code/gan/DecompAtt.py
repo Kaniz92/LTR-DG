@@ -1,4 +1,4 @@
-import tensorflow.compat.v1 as tf
+import tensorflow as tf
 
 
 class DecompAtt(object):
@@ -22,27 +22,28 @@ class DecompAtt(object):
         assert self.hidden_size == self.embedding_size, 'size should be the same'
 
         # regularizer
-        self.regularizer = tf.contrib.layers.l2_regularizer(scale=self.l2_reg_lambda)
+        self.regularizer = tf.compat.v1.contrib.layers.l2_regularizer(scale=self.l2_reg_lambda)
+        # self.regularizer = tf.keras.regularizers.L2()
 
         # placeholders for inputs [q, a, distractor, negative sample]
-        self.input_x_1 = tf.placeholder(tf.int32, [None, self.sequence_length_q], name="input_x_1")
-        self.input_x_2 = tf.placeholder(tf.int32, [None, self.sequence_length_a], name="input_x_2")
-        self.input_x_3 = tf.placeholder(tf.int32, [None, self.sequence_length_a], name="input_x_3")
-        self.input_x_4 = tf.placeholder(tf.int32, [None, self.sequence_length_a], name="input_x_4")
+        self.input_x_1 = tf.compat.v1.placeholder(tf.int32, [None, self.sequence_length_q], name="input_x_1")
+        self.input_x_2 = tf.compat.v1.placeholder(tf.int32, [None, self.sequence_length_a], name="input_x_2")
+        self.input_x_3 = tf.compat.v1.placeholder(tf.int32, [None, self.sequence_length_a], name="input_x_3")
+        self.input_x_4 = tf.compat.v1.placeholder(tf.int32, [None, self.sequence_length_a], name="input_x_4")
 
         self.premise = tf.concat([self.input_x_1, self.input_x_1], 0)
         self.answer = tf.concat([self.input_x_2, self.input_x_2], 0)
         self.hypothesis = tf.concat([self.input_x_3, self.input_x_4], 0)
 
-        self.embedding = tf.get_variable('embedding', [self.vocab_size, self.embedding_size], dtype=tf.float32,
+        self.embedding = tf.compat.v1.get_variable('embedding', [self.vocab_size, self.embedding_size], dtype=tf.float32,
                                          regularizer=self.regularizer,
                                          trainable=update_embeddings)
-        self.embedding_placeholder = tf.placeholder(tf.float32, [self.vocab_size, self.embedding_size])
+        self.embedding_placeholder = tf.compat.v1.placeholder(tf.float32, [self.vocab_size, self.embedding_size])
         self.embedding_init = self.embedding.assign(self.embedding_placeholder)
 
         # mask embedding
         raw_mask_array = [[1.]] * self.padding_id + [[0.]] + [[1.]] * (self.vocab_size - self.padding_id - 1)
-        self.mask_padding_lookup_table = tf.get_variable('mask_padding_lookup_table',
+        self.mask_padding_lookup_table = tf.compat.v1.get_variable('mask_padding_lookup_table',
                                                          initializer=raw_mask_array,
                                                          dtype=tf.float32,
                                                          trainable=False)
@@ -65,7 +66,7 @@ class DecompAtt(object):
         self.hypothesis_inputs_sum = tf.reduce_sum(self.hypothesis_inputs, 1)
 
         # run feed-forward networks
-        with tf.variable_scope("F"):
+        with tf.compat.v1.variable_scope("F"):
             self.premise_F = self.feedforward_3d(self.premise_inputs)
             self.premise_F = tf.layers.batch_normalization(self.premise_F)
         with tf.variable_scope("F", reuse=True):
