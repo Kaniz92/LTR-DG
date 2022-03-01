@@ -7,7 +7,7 @@ import pickle
 import time
 import math
 import datetime
-import tensorflow.compat.v1 as tf
+import tensorflow as tf
 from functools import wraps
 
 import Discriminator
@@ -18,34 +18,34 @@ import data_helpers as data_helpers
 
 # import dataHelper
 # Data
-tf.flags.DEFINE_string("dataset", "semevalQA", "dataset path")
-tf.flags.DEFINE_string("prefix", "semevalQA", "prefix")
+tf.compat.v1.flags.DEFINE_string("dataset", "semevalQA", "dataset path")
+tf.compat.v1.flags.DEFINE_string("prefix", "semevalQA", "prefix")
 # Model Hyperparameters
-tf.flags.DEFINE_integer("max_sequence_length_q", 100, "Max sequence length fo sentence (default: 100)")
-tf.flags.DEFINE_integer("max_sequence_length_a", 100, "Max sequence length fo sentence (default: 100)")
-tf.flags.DEFINE_integer("embedding_dim", 300, "Dimensionality of character embedding (default: 300)")
-tf.flags.DEFINE_integer("hidden_size", 300, "Dimensionality of character embedding (default: 128)")
-tf.flags.DEFINE_float("dropout_keep_prob", 0.8, "Dropout keep probability (default: 0.5)")
-tf.flags.DEFINE_float("l2_reg_lambda", 1e-6, "L2 regularizaion lambda (default: 0.0)")
-tf.flags.DEFINE_float("learning_rate", 0.0001, "learning_rate (default: 0.1)")
-tf.flags.DEFINE_string("padding", "<a>", "dataset path")
+tf.compat.v1.flags.DEFINE_integer("max_sequence_length_q", 100, "Max sequence length fo sentence (default: 100)")
+tf.compat.v1.flags.DEFINE_integer("max_sequence_length_a", 100, "Max sequence length fo sentence (default: 100)")
+tf.compat.v1.flags.DEFINE_integer("embedding_dim", 300, "Dimensionality of character embedding (default: 300)")
+tf.compat.v1.flags.DEFINE_integer("hidden_size", 300, "Dimensionality of character embedding (default: 128)")
+tf.compat.v1.flags.DEFINE_float("dropout_keep_prob", 0.8, "Dropout keep probability (default: 0.5)")
+tf.compat.v1.flags.DEFINE_float("l2_reg_lambda", 1e-6, "L2 regularizaion lambda (default: 0.0)")
+tf.compat.v1.flags.DEFINE_float("learning_rate", 0.0001, "learning_rate (default: 0.1)")
+tf.compat.v1.flags.DEFINE_string("padding", "/content/LTR-DG/code/gan/glove.840B.300d.txt", "dataset path")
 
 # Training parameters
-tf.flags.DEFINE_string("pretrained_embeddings_path", "", "path to pretrained_embeddings")
-tf.flags.DEFINE_string("pretrained_model_path", "", "path to pretrained_model")
-tf.flags.DEFINE_integer("num_epochs", 50, "Number of training epochs (default: 50)")
-tf.flags.DEFINE_integer("batch_size", 64, "Batch Size (default: 64)")
-tf.flags.DEFINE_integer("pools_size", 64, "The positive sample set, which is bigger than 500")
-tf.flags.DEFINE_integer("gan_k", 16, "the number of samples of gan")
-tf.flags.DEFINE_integer("g_epochs_num", 1, " the num_epochs of generator per epoch")
-tf.flags.DEFINE_integer("d_epochs_num", 1, " the num_epochs of discriminator per epoch")
-tf.flags.DEFINE_integer("sampled_temperature", 5, " the temperature of sampling")
+tf.compat.v1.flags.DEFINE_string("pretrained_embeddings_path", "", "path to pretrained_embeddings")
+tf.compat.v1.flags.DEFINE_string("pretrained_model_path", "", "path to pretrained_model")
+tf.compat.v1.flags.DEFINE_integer("num_epochs", 50, "Number of training epochs (default: 50)")
+tf.compat.v1.flags.DEFINE_integer("batch_size", 64, "Batch Size (default: 64)")
+tf.compat.v1.flags.DEFINE_integer("pools_size", 64, "The positive sample set, which is bigger than 500")
+tf.compat.v1.flags.DEFINE_integer("gan_k", 16, "the number of samples of gan")
+tf.compat.v1.flags.DEFINE_integer("g_epochs_num", 1, " the num_epochs of generator per epoch")
+tf.compat.v1.flags.DEFINE_integer("d_epochs_num", 1, " the num_epochs of discriminator per epoch")
+tf.compat.v1.flags.DEFINE_integer("sampled_temperature", 5, " the temperature of sampling")
 
 # Misc Parameters
-tf.flags.DEFINE_boolean("allow_soft_placement", True, "Allow device soft device placement")
-tf.flags.DEFINE_boolean("log_device_placement", False, "Log placement of ops on devices")
+tf.compat.v1.flags.DEFINE_boolean("allow_soft_placement", True, "Allow device soft device placement")
+tf.compat.v1.flags.DEFINE_boolean("log_device_placement", False, "Log placement of ops on devices")
 
-FLAGS = tf.flags.FLAGS
+FLAGS = tf.compat.v1.flags.Flag
 FLAGS(sys.argv)
 assert(FLAGS.batch_size == FLAGS.pools_size)
 

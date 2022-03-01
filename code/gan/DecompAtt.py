@@ -22,8 +22,8 @@ class DecompAtt(object):
         assert self.hidden_size == self.embedding_size, 'size should be the same'
 
         # regularizer
-        self.regularizer = tf.compat.v1.contrib.layers.l2_regularizer(scale=self.l2_reg_lambda)
-        # self.regularizer = tf.keras.regularizers.L2()
+        # self.regularizer = tf.compat.v1.contrib.layers.l2_regularizer(scale=self.l2_reg_lambda)
+        self.regularizer = tf.keras.regularizers.L2()
 
         # placeholders for inputs [q, a, distractor, negative sample]
         self.input_x_1 = tf.compat.v1.placeholder(tf.int32, [None, self.sequence_length_q], name="input_x_1")
@@ -151,6 +151,8 @@ class DecompAtt(object):
 
     def feedforward_3d(self, input3D, dim=None):
         "implement feedforward for 3D tensor by two 2D convolutions with 2 different features"
+        print('test')
+        print(input3D)
         length = input3D.get_shape()[1].value
         dimensions = input3D.get_shape()[2].value
         if dim is None:
